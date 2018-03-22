@@ -19,6 +19,7 @@ int main()
     int x;
 
     // (x = 10) returns 10 (assignment operator returns right hand side value)
+    // in c only 0 means false, so below will print 100
     int z = (x = -10) ? 100 : 10;
     printf("%d\n", z);
 
