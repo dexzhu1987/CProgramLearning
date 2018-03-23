@@ -62,7 +62,7 @@ int main()
     printf("response: %d\n", res);
 
     char s[] = "Hello World";
-    char t[] = "pk";
+    char t[] = "e";
     printf("%d\n", strrindex(s, t));
 
     return 0;
