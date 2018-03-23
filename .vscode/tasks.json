@@ -9,7 +9,7 @@
             "command": "gcc",
             "args": [
                 "-g",
-                "MyPro.c",
+                "Prog5.c",
                 "-o",
                 "Hello"
             ],
