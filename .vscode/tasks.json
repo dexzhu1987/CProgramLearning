@@ -9,9 +9,9 @@
             "command": "gcc",
             "args": [
                 "-g",
-                "Copy.c",
+                "Project.c",
                 "-o",
-                "Copy"
+                "go"
             ],
             "problemMatcher": "$gcc"
         }

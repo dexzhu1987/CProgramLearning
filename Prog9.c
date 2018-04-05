@@ -18,10 +18,9 @@ struct node
 {
     int value;
     struct node *next;
-}
+};
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct Car1 car1; //option 1
     car1.price = 10000;
