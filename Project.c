@@ -8,29 +8,121 @@
 
 void go_help()
 {
-    printf("go go name   : go to name dir\n");
-    printf("go ls        : list all directories registered.\n");
-    printf("go add name  : add current dir as name to the list\n");
-    printf("go rm name   : remove name dir from the list.\n");
+    printf("g name    　: go gto name dir.\n");
+    printf("g ls      　: list all directions registered.\n");
+    printf("g add name　: add current dir as name to the list.\n");
+    printf("g rm name 　: remove name dir from the list.\n");
 }
 
 void go_ls()
 {
-    char line[256];
-    char name[16], path[128];
+    char line0[256];
+    char name0[16], path0[128];
     FILE *fp;
     fp = fopen("/Users/dexunzhu/.g.conf", "r");
     if (!fp)
     {
         exit(0);
     }
-    while (fgets(line, 256, fp) != NULL)
+    while (fgets(line0, 256, fp) != NULL)
     {
-        sscanf(line, "%s %s", name, path);
-        printf("%s -> %s\n", name, path);
+        sscanf(line0, "%s %s", name0, path0);
+        printf("%s -> %s\n", name0, path0);
     }
 
     fclose(fp);
+}
+
+void go_add(char argv[])
+{
+
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+
+    char line[256];
+    char name[16], path[128];
+    FILE *fp;
+    fp = fopen("/Users/dexunzhu/.g.conf", "a");
+    if (!fp)
+    {
+        exit(0);
+    }
+
+    char str[16384];
+    strcpy(str, "");
+
+    char line1[256];
+    while (fgets(line1, 256, fp) != NULL)
+    {
+        strcpy(str, line1);
+    }
+
+    char *blank = " ";
+    char *newline = "\n";
+    strcat(str, newline);
+    strcat(str, argv);
+    strcat(str, blank);
+    strcat(str, cwd);
+    fputs(str, fp);
+
+    fclose(fp);
+}
+
+void go_remove(char argv[])
+{
+
+    FILE *fp;
+    FILE *fp2;
+    fp = fopen("/Users/dexunzhu/.g.conf", "r");
+    fp2 = fopen("/Users/dexunzhu/replica.c", "w");
+    if (!fp)
+    {
+        exit(0);
+    }
+
+    char str2[16384];
+    char line2[256];
+    char name2[16], path2[128];
+    while (fgets(line2, 256, fp) != NULL)
+    {
+        sscanf(line2, "%s %s", name2, path2);
+        if (strcmp(argv, name2) != 0)
+        {
+            strcat(str2, line2);
+        }
+    }
+
+    fputs(str2, fp2);
+
+    fclose(fp);
+    fclose(fp2);
+
+    remove("/Users/dexunzhu/.g.conf");
+    rename("/Users/dexunzhu/replica.c", "/Users/dexunzhu/.g.conf");
+
+    FILE *fp3, *fp4;
+    char str3[256];
+
+    fp3 = fopen("/Users/dexunzhu/.g.conf", "r");
+    fp4 = fopen("/Users/dexunzhu/replica.c", "w");
+
+    /* copy the contents of file 3 to file 4 except all blank lines */
+    while (!feof(fp3))
+    {
+        fgets(str3, 256, fp3);
+        if (strcmp(str3, "\n") == 0)
+        {
+            continue;
+        }
+        fputs(str3, fp4);
+        strcpy(str3, "\0");
+    }
+
+    fclose(fp3);
+    fclose(fp4);
+
+    remove("/Users/dexunzhu/.g.conf");
+    rename("/Users/dexunzhu/replica.c", "/Users/dexunzhu/.g.conf");
 }
 
 int main(int argc, char *argv[])
@@ -52,19 +144,14 @@ int main(int argc, char *argv[])
         go_ls();
     }
 
-    if (strcmp(argv[1], "go") == 0)
+    if (strcmp(argv[1], "rm") == 0)
     {
-        const char *target = argv[1];
-        char directory[1024];
-
-        getcwd(directory, sizeof(directory));
-        printf("In %s\n", directory);
-
-        if (chdir(target) == 0)
-        {
-            getcwd(directory, sizeof(directory));
-            printf("In %s\n", directory);
-        }
-        return 0;
+        go_remove(argv[2]);
     }
+
+    if (strcmp(argv[1], "add") == 0)
+    {
+        go_add(argv[2]);
+    }
+    return 0;
 }
