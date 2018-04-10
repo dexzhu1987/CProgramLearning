@@ -63,7 +63,7 @@ void go_add(char argv[])
     strcat(str, argv);
     strcat(str, blank);
     strcat(str, cwd);
-    fputs(str, fp);
+    fprintf(fp, "%s", str);
 
     fclose(fp);
 }
@@ -92,34 +92,26 @@ void go_remove(char argv[])
         }
     }
 
-    fputs(str2, fp2);
+    char temp[16384];
+    int i = 0;
+    if (str2[strlen(str2) - 1] == '\n')
+    {
+        while (str2[i + 2] != '\0')
+        {
+            temp[i] = str2[i];
+            i++;
+        }
+        temp[i] = '\0';
+    }
+    else
+    {
+        strcpy(temp, str2);
+    }
+
+    fputs(temp, fp2);
 
     fclose(fp);
     fclose(fp2);
-
-    remove("/Users/dexunzhu/.g.conf");
-    rename("/Users/dexunzhu/replica.c", "/Users/dexunzhu/.g.conf");
-
-    FILE *fp3, *fp4;
-    char str3[256];
-
-    fp3 = fopen("/Users/dexunzhu/.g.conf", "r");
-    fp4 = fopen("/Users/dexunzhu/replica.c", "w");
-
-    /* copy the contents of file 3 to file 4 except all blank lines */
-    while (!feof(fp3))
-    {
-        fgets(str3, 256, fp3);
-        if (strcmp(str3, "\n") == 0)
-        {
-            continue;
-        }
-        fputs(str3, fp4);
-        strcpy(str3, "\0");
-    }
-
-    fclose(fp3);
-    fclose(fp4);
 
     remove("/Users/dexunzhu/.g.conf");
     rename("/Users/dexunzhu/replica.c", "/Users/dexunzhu/.g.conf");
