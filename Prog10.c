@@ -1,3 +1,6 @@
+// gcc -E -C -P -DRUNMACRO main.c run the content of c (to see what codes are actually running into the compiler)
+//even with comments
+
 #include <stdio.h>    //C standard lib
 #include "multiply.h" //  your haeader;
 #define SQUARE(*) multiply(*, *);
@@ -13,11 +16,11 @@ int main()
     printf("%s\n", __TIME__); //print current time;
     printf("%d\n", __LINE__); //print line number;
 
-#if !definde(RUNMACRO) //if RUNMARCRO is not defined;
+#if !definde(RUNMACRO) //if RUNMARCRO is not defined, run below codes;
     SQUARE(5);
 #endif
 
-#ifndef RUNMACRO //if RUNMARCRO is not defined, the same as above
+#ifndef RUNMACRO //if RUNMARCRO is not defined, run below codes, the same as above
     SQUARE(6);
 #endif
 

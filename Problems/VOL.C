@@ -8,7 +8,7 @@ int main()
     long double height = 0.0L;
 
     printf("Enter your radius\n");
-    scanf("%Lf\n", &radius);
+    scanf(" %Lf\n", &radius);
 
     printf("Enter your height\n");
     scanf(" %Lf\n", &height);
